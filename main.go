@@ -1,9 +1,10 @@
 package main
 
 import (
-	"arctic/cmd"
+	"arctic/cli"
 )
 
 func main() {
-	cmd.Execute()
+	// TODO: Right now I am rushing to get a MVP, refactor this more sensibly
+	cli.Execute()
 }

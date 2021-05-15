@@ -8,6 +8,7 @@ tmp_dir = "tmp"
 [build]
 # Watch these filename extensions.
 include_ext = ["go", "tpl", "tmpl", "html"]
+cmd = "make install"
 
 # Ignore these filename extensions or directories.
 exclude_dir = ["assets", "tmp", "vendor", "data"]

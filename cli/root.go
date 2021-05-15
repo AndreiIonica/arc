@@ -1,11 +1,11 @@
-package cmd
+package cli
 
 import (
 	"github.com/spf13/cobra"
 )
 
 var (
-	rootCmd = &cobra.Command{
+	cli = &cobra.Command{
 		Use:   "arctic",
 		Short: "Smart project generator",
 		Long: `Arctic is a project generator.
@@ -16,10 +16,10 @@ to quickly create an application.`,
 
 // Execute executes the root command.
 func Execute() error {
-	return rootCmd.Execute()
+	return cli.Execute()
 }
 
 func init() {
-	rootCmd.AddCommand(versionController)
-	rootCmd.AddCommand(createController)
+	cli.AddCommand(versionController)
+	cli.AddCommand(createController)
 }
