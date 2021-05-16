@@ -1,10 +1,10 @@
 package handlers
 
 import (
+	"arctic/project"
 	"arctic/util"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
@@ -12,7 +12,7 @@ import (
 
 var (
 	projectLocation string
-	projects        []string
+	projectChoices  []string
 	qs              []*survey.Question
 )
 
@@ -20,7 +20,7 @@ func init() {
 	// This function is ran first in this file
 	// so i can set config vars here
 	projectLocation = fmt.Sprintf("%v/.project-templates", os.Getenv("HOME"))
-	projects = util.GetProjects(projectLocation)
+	projectChoices = util.GetProjects(projectLocation)
 
 	qs = []*survey.Question{
 		{
@@ -29,10 +29,10 @@ func init() {
 			Validate: util.ValidateName,
 		},
 		{
-			Name: "type",
+			Name: "language",
 			Prompt: &survey.Select{
-				Message: "Project type:",
-				Options: projects,
+				Message: "Project language:",
+				Options: projectChoices,
 			},
 		},
 		{
@@ -40,14 +40,25 @@ func init() {
 			Prompt:   &survey.Input{Message: "Where to create:"},
 			Validate: util.ValidateName,
 		},
+		{
+			Name: "repo",
+			Prompt: &survey.Select{
+				Message: "Create git repo?",
+				Options: []string{
+					"Yes",
+					"No",
+				},
+			},
+		},
 	}
 }
 
 // Type of response
 type Answer struct {
 	Name   string
-	Type   string
+	Lang   string `survey:"language"`
 	Folder string
+	Repo   string
 }
 
 func HandleCreation(cmd *cobra.Command, args []string) {
@@ -59,24 +70,16 @@ func HandleCreation(cmd *cobra.Command, args []string) {
 		fmt.Printf("Error while asking questions: %s", err.Error())
 		return
 	}
-
-	// REFACTOR: this filename stuff
-	src := fmt.Sprintf("%s/%s", projectLocation, answers.Type)
-	dest := fmt.Sprintf("./%s", answers.Folder)
-
-	err = util.CopyFolder(src, dest)
-	if err != nil {
-		fmt.Printf("Error while copying template: %s", err.Error())
-		return
+	project := project.Project{
+		Name:     answers.Name,
+		Lang:     answers.Lang,
+		Repo:     answers.Repo == "Yes",
+		Location: answers.Folder,
 	}
 
-	// Go into the project folder in order to execute commands
-	os.Chdir(dest)
-
-	current, _ := os.Getwd()
-
-	err = util.RunCommands(filepath.Join(current, "commands.txt"))
+	err = project.CreatePoject()
 	if err != nil {
-		fmt.Printf("Error while executing commands: %s", err.Error())
+		fmt.Printf("Error while creating project:\n\t %s", err.Error())
 	}
+
 }
