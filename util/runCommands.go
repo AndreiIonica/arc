@@ -1,4 +1,4 @@
-package handlers
+package util
 
 import (
 	"arctic/cli/handlers/command"
@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-func execute(filepath string) error {
+func RunCommands(filepath string) error {
 	fmt.Println("Starting to execute")
 	file, err := os.Open(filepath)
 	if err != nil {

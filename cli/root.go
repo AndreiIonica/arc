@@ -14,12 +14,12 @@ to quickly create an application.`,
 	}
 )
 
-// Execute executes the root command.
-func Execute() error {
-	return cli.Execute()
-}
-
 func init() {
 	cli.AddCommand(versionController)
 	cli.AddCommand(createController)
+}
+
+// Starts the cli
+func Execute() error {
+	return cli.Execute()
 }

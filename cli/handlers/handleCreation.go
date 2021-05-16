@@ -1,109 +1,82 @@
 package handlers
 
 import (
-	"errors"
+	"arctic/util"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"regexp"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
 )
 
-func validateName(raw interface{}) error {
-	input, ok := raw.(string)
+var (
+	projectLocation string
+	projects        []string
+	qs              []*survey.Question
+)
 
-	if !ok {
-		return errors.New("please provide a valid string")
-	}
-	if input == "." {
-		return nil
-	}
+func init() {
+	// This function is ran first in this file
+	// so i can set config vars here
+	projectLocation = fmt.Sprintf("%v/.project-templates", os.Getenv("HOME"))
+	projects = util.GetProjects(projectLocation)
 
-	// Names may only contain letters,numbers,underscores,-,#
-	matched, err := regexp.MatchString(`^([A-Za-z\-\_\d\# \-])+$`, input)
-	if err != nil {
-		return errors.New("error in regex")
-	}
-
-	if !matched {
-		return errors.New("invalid name")
-	}
-	return nil
-}
-
-func getProjects(projectLocation string) []string {
-
-	files, err := ioutil.ReadDir(projectLocation)
-
-	if err != nil {
-		return nil
-	}
-	names := []string{}
-
-	for _, file := range files {
-		names = append(names, file.Name())
-	}
-
-	return names
-
-}
-
-var projectLocation = fmt.Sprintf("%v/.project-templates", os.Getenv("HOME"))
-
-// the questions to ask
-var qs = []*survey.Question{
-	{
-		Name:     "name",
-		Prompt:   &survey.Input{Message: "Project name:"},
-		Validate: validateName,
-	},
-	{
-		Name: "type",
-		Prompt: &survey.Select{
-			Message: "Project type:",
-			Options: getProjects(projectLocation),
+	qs = []*survey.Question{
+		{
+			Name:     "name",
+			Prompt:   &survey.Input{Message: "Project name:"},
+			Validate: util.ValidateName,
 		},
-	},
-	{
-		Name:     "folder",
-		Prompt:   &survey.Input{Message: "Where to create:"},
-		Validate: validateName,
-	},
+		{
+			Name: "type",
+			Prompt: &survey.Select{
+				Message: "Project type:",
+				Options: projects,
+			},
+		},
+		{
+			Name:     "folder",
+			Prompt:   &survey.Input{Message: "Where to create:"},
+			Validate: util.ValidateName,
+		},
+	}
+}
+
+// Type of response
+type Answer struct {
+	Name   string
+	Type   string
+	Folder string
 }
 
 func HandleCreation(cmd *cobra.Command, args []string) {
-	// TODO: refactor this(regarding filenames)
-	answers := struct {
-		Name   string
-		Type   string
-		Folder string
-	}{}
+	answers := Answer{}
 
-	// perform the questions
 	err := survey.Ask(qs, &answers)
+
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Printf("Error while asking questions: %s", err.Error())
 		return
 	}
 
-	// TODO: right now using system call, will do it the proper way
-	initialPath := fmt.Sprintf("%v/%v", projectLocation, answers.Type)
-	resultingPath := fmt.Sprintf("./%v", answers.Folder)
+	// REFACTOR: this filename stuff
+	src := fmt.Sprintf("%s/%s", projectLocation, answers.Type)
+	dest := fmt.Sprintf("./%s", answers.Folder)
 
-	command := exec.Command("cp", "-r", initialPath, resultingPath)
-	if err := command.Run(); err != nil {
-		fmt.Println("Error in copyinng folder")
+	err = util.CopyFolder(src, dest)
+	if err != nil {
+		fmt.Printf("Error while copying template: %s", err.Error())
+		return
 	}
 
-	os.Chdir(resultingPath)
+	// Go into the project folder in order to execute commands
+	os.Chdir(dest)
 
 	current, _ := os.Getwd()
-	err = execute(filepath.Join(current, "commands.txt"))
+
+	err = util.RunCommands(filepath.Join(current, "commands.txt"))
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Printf("Error while executing commands: %s", err.Error())
 	}
 }
