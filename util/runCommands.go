@@ -20,10 +20,11 @@ func RunCommands(filepath string) error {
 	in := bufio.NewScanner(file)
 
 	for in.Scan() {
-		cmd := command.ParseString(in.Text())
+		text := in.Text()
+		cmd := command.ParseString(text)
 		err = cmd.Execute()
 		if err != nil {
-			return err
+			fmt.Printf(`Error while executing "%s": %s`, text, err.Error())
 		}
 	}
 
