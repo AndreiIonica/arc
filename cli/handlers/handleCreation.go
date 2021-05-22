@@ -14,13 +14,23 @@ var (
 	projectLocation string
 	projectChoices  []string
 	qs              []*survey.Question
+	tagChoices      []string
+	tagLocation     string
 )
 
 func init() {
 	// This function is ran first in this file
 	// so i can set config vars here
 	projectLocation = fmt.Sprintf("%v/.project-templates", os.Getenv("HOME"))
-	projectChoices = util.GetProjects(projectLocation)
+	projectChoices, _ = util.GetFolders(projectLocation)
+	tagLocation = fmt.Sprintf("%v/dev", os.Getenv("HOME"))
+	tagChoices, _ = util.GetFolders(tagLocation)
+	// For future use, "None" will serve as a way not to add it to the central store
+	tagChoices = append(tagChoices, "None")
+
+	current, _ := os.Getwd()
+
+	preselectedTag := util.GetTag(current, tagChoices)
 
 	qs = []*survey.Question{
 		{
@@ -41,6 +51,14 @@ func init() {
 			Validate: util.ValidateName,
 		},
 		{
+			Name: "Tag",
+			Prompt: &survey.Select{
+				Message: "Tag: ",
+				Options: tagChoices,
+				Default: preselectedTag,
+			},
+		},
+		{
 			Name: "repo",
 			Prompt: &survey.Select{
 				Message: "Create git repo?",
@@ -59,6 +77,7 @@ type Answer struct {
 	Lang   string `survey:"language"`
 	Folder string
 	Repo   string
+	Tag    string
 }
 
 func HandleCreation(cmd *cobra.Command, args []string) {
@@ -75,6 +94,7 @@ func HandleCreation(cmd *cobra.Command, args []string) {
 		Lang:     answers.Lang,
 		Repo:     answers.Repo == "Yes",
 		Location: answers.Folder,
+		Tag:      answers.Tag,
 	}
 
 	err = project.CreatePoject()

@@ -1,20 +1,23 @@
 package util
 
-import "io/ioutil"
+import "os"
 
-func GetProjects(projectLocation string) []string {
+func GetFolders(path string) ([]string, error) {
 
-	files, err := ioutil.ReadDir(projectLocation)
+	files, err := os.ReadDir(path)
 
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	names := []string{}
 
 	for _, file := range files {
-		names = append(names, file.Name())
+		if file.IsDir() {
+			names = append(names, file.Name())
+		}
+
 	}
 
-	return names
+	return names, nil
 
 }
