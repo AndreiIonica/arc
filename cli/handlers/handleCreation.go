@@ -89,9 +89,12 @@ func HandleCreation(cmd *cobra.Command, args []string) {
 		fmt.Printf("Error while asking questions: %s", err.Error())
 		return
 	}
+
+	var langs []string
+	langs = append(langs, answers.Lang)
 	project := project.Project{
 		Name:     answers.Name,
-		Lang:     answers.Lang,
+		Lang:     langs,
 		Repo:     answers.Repo == "Yes",
 		Location: answers.Folder,
 		Tag:      answers.Tag,

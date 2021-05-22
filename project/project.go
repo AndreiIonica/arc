@@ -7,7 +7,7 @@ import (
 
 type Project struct {
 	Name     string
-	Lang     string
+	Lang     []string
 	Tag      string
 	Repo     bool
 	Location string

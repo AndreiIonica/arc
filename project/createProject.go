@@ -9,10 +9,11 @@ import (
 
 func (p *Project) CreatePoject() error {
 	// REFACTOR: this seems iffy, especially the file acces stuff,
-	//           will try to use go for that
+	//           will try to use golang for that
 	projectLocation := fmt.Sprintf("%v/.project-templates", os.Getenv("HOME"))
 
-	src := fmt.Sprintf("%s/%s", projectLocation, p.Lang)
+	// index zero because we can have multiple languages
+	src := fmt.Sprintf("%s/%s", projectLocation, p.Lang[0])
 	dest := fmt.Sprintf("./%s", p.Location)
 
 	err := util.CopyFolder(src, dest)

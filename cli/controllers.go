@@ -18,3 +18,9 @@ var createController = &cobra.Command{
 	Short: "Scaffold a project",
 	Run:   handlers.HandleCreation,
 }
+
+var moveController = &cobra.Command{
+	Use:   "move",
+	Short: "Move a project to another tag. Ex: from TODO to Working",
+	Run:   handlers.HandleMove,
+}

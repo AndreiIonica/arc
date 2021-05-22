@@ -17,6 +17,7 @@ to quickly create an application.`,
 func init() {
 	cli.AddCommand(versionController)
 	cli.AddCommand(createController)
+	cli.AddCommand(moveController)
 }
 
 // Starts the cli
