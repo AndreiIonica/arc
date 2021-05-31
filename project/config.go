@@ -14,7 +14,7 @@ type ConfigFile struct {
 	Repo bool     `toml:"repo"`
 }
 
-func (p *Project) writeConfig(path string) error {
+func (p *Project) WriteConfig(path string) error {
 
 	bytes, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -29,10 +29,9 @@ func (p *Project) writeConfig(path string) error {
 	}
 	config.Name = p.Name
 	config.Repo = p.Repo
-	// Hardocing it for now, will add later
-	// FIXME
 	config.Tag = p.Tag
 	bytes, err = toml.Marshal(config)
+
 	if err != nil {
 		return fmt.Errorf("could not encode config file: %s \n\t", err.Error())
 	}

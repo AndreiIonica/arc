@@ -28,7 +28,7 @@ func (p *Project) CreatePoject() error {
 	// from here on any error will pe printed but wont stop de function
 
 	current, _ := os.Getwd()
-	err = p.writeConfig(filepath.Join(current, ".arctic.toml"))
+	err = p.WriteConfig(filepath.Join(current, ".arctic.toml"))
 	if err != nil {
 		fmt.Printf("\tError while writing config: %s\n\t", err.Error())
 	}

@@ -13,9 +13,10 @@ import (
 var (
 	projectLocation string
 	projectChoices  []string
-	qs              []*survey.Question
+	qsCreate        []*survey.Question
 	tagChoices      []string
 	tagLocation     string
+	homeLocation    string
 )
 
 func init() {
@@ -23,7 +24,8 @@ func init() {
 	// so i can set config vars here
 	projectLocation = fmt.Sprintf("%v/.project-templates", os.Getenv("HOME"))
 	projectChoices, _ = util.GetFolders(projectLocation)
-	tagLocation = fmt.Sprintf("%v/dev", os.Getenv("HOME"))
+	homeLocation, _ = os.UserHomeDir()
+	tagLocation = fmt.Sprintf("%v/dev", homeLocation)
 	tagChoices, _ = util.GetFolders(tagLocation)
 	// For future use, "None" will serve as a way not to add it to the central store
 	tagChoices = append(tagChoices, "None")
@@ -32,7 +34,7 @@ func init() {
 
 	preselectedTag := util.GetTag(current, tagChoices)
 
-	qs = []*survey.Question{
+	qsCreate = []*survey.Question{
 		{
 			Name:     "name",
 			Prompt:   &survey.Input{Message: "Project name:"},
@@ -72,7 +74,7 @@ func init() {
 }
 
 // Type of response
-type Answer struct {
+type answerCreate struct {
 	Name   string
 	Lang   string `survey:"language"`
 	Folder string
@@ -81,9 +83,9 @@ type Answer struct {
 }
 
 func HandleCreation(cmd *cobra.Command, args []string) {
-	answers := Answer{}
+	answers := answerCreate{}
 
-	err := survey.Ask(qs, &answers)
+	err := survey.Ask(qsCreate, &answers)
 
 	if err != nil {
 		fmt.Printf("Error while asking questions: %s", err.Error())
