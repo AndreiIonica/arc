@@ -39,14 +39,12 @@ func HandleMove(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	proj, err := project.ReadConfig(path.Join(current, ".arctic.toml"))
+	// discarding project obj, will use it when i add central store
+	_, err = project.ReadConfig(path.Join(current, ".arctic.toml"))
 	if err != nil {
 		fmt.Printf("Error reading config: %s", err.Error())
 		return
 	}
-
-	fmt.Println(proj)
-	fmt.Println(current)
 
 	answers := answerMove{}
 
