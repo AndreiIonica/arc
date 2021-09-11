@@ -1,6 +1,6 @@
 <h1 align="center">
   <img src="./.github/images/iceberg.png" width="224px"/><br/>
-	Welcome to Arctic
+	Welcome to arc
 </h1>
 
 <p align="center">
@@ -14,12 +14,12 @@ Quickly create and manage projects directly rom the cli.
 
 > Smart project generator/manager written in Go
 
-### 🏠 [Homepage](https://github.com/AndreiIonica/arctic#readme)
+### 🏠 [Homepage](https://github.com/AndreiIonica/arc#readme)
 
 ## ⚡ Quick start ⚡
 
 ```sh
-go install github.com/AndreiIonica/arctic@latest
+go install github.com/AndreiIonica/arc@latest
 ```
 
 ## Installation
@@ -37,7 +37,7 @@ make install (only linux works for now)
 ## Usage
 
 ```sh
-arctic
+arc
 ```
 
 ## Run tests
@@ -54,7 +54,7 @@ go test
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/AndreiIonica/arctic/issues).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/AndreiIonica/arc/issues).
 
 ## Show your support
 
@@ -63,7 +63,7 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2021 [Andrei Ionica](https://github.com/AndreiIonica).<br />
-This project is [MIT](https://github.com/AndreiIonica/arctic/blob/master/LICENSE) licensed.
+This project is [MIT](https://github.com/AndreiIonica/arc/blob/master/LICENSE) licensed.
 
 ---
 

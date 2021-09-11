@@ -6,9 +6,9 @@ import (
 
 var (
 	cli = &cobra.Command{
-		Use:   "arctic",
+		Use:   "arc",
 		Short: "Smart project generator",
-		Long: `Arctic is a project generator.
+		Long: `arc is a project generator.
 This application is a tool to generate the needed files
 to quickly create an application.`,
 	}

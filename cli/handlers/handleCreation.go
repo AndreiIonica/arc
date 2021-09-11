@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"arctic/project"
-	"arctic/util"
+	"arc/project"
+	"arc/util"
 	"fmt"
 	"os"
 

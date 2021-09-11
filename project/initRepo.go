@@ -1,7 +1,7 @@
 package project
 
 import (
-	"arctic/util/command"
+	"arc/util/command"
 	"fmt"
 )
 

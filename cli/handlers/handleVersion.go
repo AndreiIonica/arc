@@ -7,5 +7,5 @@ import (
 )
 
 func HandleVersion(cmd *cobra.Command, args []string) {
-	fmt.Println("Arctic Generator v0.1")
+	fmt.Println("arc Generator v0.1")
 }

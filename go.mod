@@ -1,4 +1,4 @@
-module arctic
+module arc
 
 go 1.16
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"arctic/cli"
+	"arc/cli"
 )
 
 func main() {

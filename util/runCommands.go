@@ -1,7 +1,7 @@
 package util
 
 import (
-	"arctic/util/command"
+	"arc/util/command"
 
 	"bufio"
 	"errors"

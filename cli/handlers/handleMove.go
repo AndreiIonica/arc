@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"arctic/project"
-	"arctic/util/command"
+	"arc/project"
+	"arc/util/command"
 	"fmt"
 	"os"
 	"path"
@@ -40,7 +40,7 @@ func HandleMove(cmd *cobra.Command, args []string) {
 	}
 
 	// discarding project obj, will use it when i add central store
-	_, err = project.ReadConfig(path.Join(current, ".arctic.toml"))
+	_, err = project.ReadConfig(path.Join(current, ".arc.toml"))
 	if err != nil {
 		fmt.Printf("Error reading config: %s", err.Error())
 		return
