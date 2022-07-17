@@ -1,4 +1,4 @@
-module arc
+module scaffold
 
 go 1.16
 
