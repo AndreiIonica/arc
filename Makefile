@@ -1,3 +1,4 @@
+.PHONY: build 
 build: clean
 	go build -o build/scaffold main.go
 
