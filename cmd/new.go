@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"fmt"
 	"scaffold/core/env"
 	"scaffold/core/input"
+	"scaffold/core/template"
 
 	"github.com/spf13/cobra"
 )
@@ -20,7 +20,7 @@ var newProjectCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		fmt.Println(userAnswers)
-		return nil
+		err = template.Scaffold(userAnswers)
+		return err
 	},
 }
