@@ -1,7 +1,9 @@
 package cmd
 
 import (
-	"scaffold/core/env"
+	"os"
+	"path/filepath"
+
 	"scaffold/core/input"
 	"scaffold/core/template"
 
@@ -12,15 +14,28 @@ var newProjectCmd = &cobra.Command{
 	Use:   "new",
 	Short: "scaffold a new project",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		userEnv, err := env.GetUserEnv()
+		workingDir, err := os.Getwd()
 		if err != nil {
 			return err
 		}
-		userAnswers, err := input.AskQuestions(userEnv)
+		defaultProjectName := filepath.Base(workingDir)
+
+		userHome, err := os.UserHomeDir()
 		if err != nil {
 			return err
 		}
-		err = template.Scaffold(userAnswers)
+
+		templatePaths, err := template.LoadTemplates(filepath.Join(userHome, ".scaffold-templates"))
+		if err != nil {
+			return err
+		}
+
+		userAnswers, err := input.AskQuestions(defaultProjectName, template.GetTemplateNames(templatePaths))
+		if err != nil {
+			return err
+		}
+
+		err = template.Scaffold(userAnswers, templatePaths)
 		return err
 	},
 }

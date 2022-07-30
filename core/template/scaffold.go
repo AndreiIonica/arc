@@ -1,13 +1,12 @@
 package template
 
 import (
-	"os"
 	"path/filepath"
 	"scaffold/core/input"
 )
 
 // Scaffold bootstraps a project
-func Scaffold(ans *input.UserAnswers) error {
+func Scaffold(ans *input.UserAnswers, templatePaths map[string]string) error {
 	// TODO: platform independent implementation
 	// TODO: replace project name in files
 	// TODO: bootstrap.sh script
@@ -16,11 +15,7 @@ func Scaffold(ans *input.UserAnswers) error {
 	if err != nil {
 		return err
 	}
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
-	templatePath := filepath.Join(home, ".scaffold-templates", ans.Template)
-	err = copyFolder(templatePath, dst)
+
+	err = copyFolder(templatePaths[ans.Template], dst)
 	return err
 }
