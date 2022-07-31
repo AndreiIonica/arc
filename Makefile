@@ -1,15 +1,13 @@
+.PHONY: build 
 build: clean
-	go build -o build/arc main.go
+	go build -o build/scaffold main.go
 
 run: build
-	./build/server
-
-dev:
-	air -c .air.toml
+	./build/scaffold
 
 clean:
 	rm -rf build/
 
 install: build
-	cp build/arc ~/bin/
+	cp build/scaffold ~/bin/
 

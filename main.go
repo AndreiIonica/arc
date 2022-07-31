@@ -1,10 +1,16 @@
 package main
 
 import (
-	"arc/cli"
+	"fmt"
+	"os"
+	"scaffold/cmd"
 )
 
 func main() {
-	// TODO: Right now I am rushing to get a MVP, refactor this more sensibly
-	cli.Execute()
+	root := cmd.NewRootCmd()
+	cmd.AddSubCommands(root)
+	if err := root.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
