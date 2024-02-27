@@ -8,33 +8,37 @@ import (
 	"path"
 )
 
+// PLATFORM INDEPENTENT way of copying stuff
+
 // Copy CONTENTS of src directly into dst
 func copyFolder(src, dst string) error {
+	// TODO better error handling
 	var err error
-	var fds []os.FileInfo
-	var srcinfo os.FileInfo
+	var content []os.FileInfo
+	var srcInfo os.FileInfo
 
-	if srcinfo, err = os.Stat(src); err != nil {
+	if srcInfo, err = os.Stat(src); err != nil {
 		return err
 	}
 
-	if err = os.MkdirAll(dst, srcinfo.Mode()); err != nil {
+	if err = os.MkdirAll(dst, srcInfo.Mode()); err != nil {
 		return err
 	}
 
-	if fds, err = ioutil.ReadDir(src); err != nil {
+	if content, err = ioutil.ReadDir(src); err != nil {
 		return err
 	}
-	for _, fd := range fds {
-		srcfp := path.Join(src, fd.Name())
-		dstfp := path.Join(dst, fd.Name())
+	for _, fd := range content {
+		srcFilePath := path.Join(src, fd.Name())
+		destFilePath := path.Join(dst, fd.Name())
 
 		if fd.IsDir() {
-			if err = copyFolder(srcfp, dstfp); err != nil {
+			// TODO: Recursive, might wanna check performance for deeply nested directories
+			if err = copyFolder(srcFilePath, destFilePath); err != nil {
 				fmt.Println(err)
 			}
 		} else {
-			if err = copyFile(srcfp, dstfp); err != nil {
+			if err = copyFile(srcFilePath, destFilePath); err != nil {
 				fmt.Println(err)
 			}
 		}
